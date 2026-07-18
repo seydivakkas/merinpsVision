@@ -6,7 +6,7 @@
     "category": "synthetic_textile",
     "license": "Project test fixture",
     "commercial_use": true,
-    "retrieved_at": "2026-07-18T00:26:54.550216Z",
+    "retrieved_at": "2026-01-01T00:00:00Z",
     "source_url": "local:scripts/generate_fixtures.py"
   },
   "counts": {
@@ -247,5 +247,5 @@
     }
   ],
   "verification_status": "VERIFIED",
-  "manifest_sha256": "37b83f2288cd71d00404448c13f6730759789d82c244d0af9db3e2c653fff459"
+  "manifest_sha256": "f9fa05de75a4ffb3e1cdbb5f497d0d89f7a251477b57bb4a3b7a540d12594791"
 }

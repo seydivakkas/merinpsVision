@@ -20,11 +20,14 @@ def test_doctor_and_model_list_json() -> None:
 
 
 def test_dataset_audit_and_blocked_benchmark() -> None:
+    manifest_path = Path("data/manifests/weavevision_fixture.json")
+    manifest_before = manifest_path.read_bytes()
     audit = runner.invoke(
         app, ["dataset", "audit", "--config", "configs/datasets/fixture.yaml", "--json"]
     )
     assert audit.exit_code == 0
     assert json.loads(audit.stdout)["verification_status"] == "VERIFIED"
+    assert manifest_path.read_bytes() == manifest_before
     benchmark = runner.invoke(
         app, ["benchmark", "--config", "configs/experiments/robustness.yaml", "--json"]
     )

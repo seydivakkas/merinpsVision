@@ -8,6 +8,8 @@ from weavevision.data.adapters.mvtec_ad import MVTecADAdapter
 from weavevision.data.manifest import finalize_manifest, write_manifest_atomic
 from weavevision.domain.schemas import DatasetManifest, DatasetSource, SplitPolicy
 
+FIXTURE_RETRIEVED_AT = datetime(2026, 1, 1, tzinfo=UTC)
+
 
 class FixtureAdapter(MVTecADAdapter):
     """Verify deterministic synthetic fixtures using the strict MVTec-like layout."""
@@ -24,7 +26,7 @@ class FixtureAdapter(MVTecADAdapter):
                         category="synthetic_textile",
                         license="Project test fixture",
                         commercial_use=True,
-                        retrieved_at=datetime.now(UTC),
+                        retrieved_at=FIXTURE_RETRIEVED_AT,
                         source_url="local:scripts/generate_fixtures.py",
                     ),
                     "split_policy": SplitPolicy(
