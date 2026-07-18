@@ -1,0 +1,15 @@
+services:
+  weavevision:
+    build:
+      context: .
+      dockerfile: Dockerfile.cpu
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./artifacts:/app/artifacts
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true

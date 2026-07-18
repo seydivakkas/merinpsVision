@@ -1,0 +1,15 @@
+FROM python:3.11-slim AS runtime
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 UV_COMPILE_BYTECODE=1 NVIDIA_VISIBLE_DEVICES=all
+RUN pip install --no-cache-dir uv==0.11.8
+WORKDIR /app
+COPY pyproject.toml uv.lock README.md LICENSE WEAVEVISION_CURSOR_MASTER_BUILD_SPEC.md ./
+COPY src ./src
+COPY configs ./configs
+COPY .streamlit ./.streamlit
+RUN uv sync --frozen --no-dev
+RUN useradd --create-home --uid 10001 weavevision && mkdir -p /app/data /app/artifacts && chown -R weavevision:weavevision /app
+USER weavevision
+ENV PATH="/app/.venv/bin:${PATH}"
+EXPOSE 8501
+HEALTHCHECK --interval=30s --timeout=20s --retries=3 CMD weavevision doctor --json || exit 1
+CMD ["weavevision", "serve"]

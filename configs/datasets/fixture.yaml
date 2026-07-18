@@ -1,0 +1,10 @@
+dataset:
+  id: weavevision_fixture
+  adapter: fixture
+  category: carpet
+  root: data/fixtures
+  manifest_path: data/manifests/weavevision_fixture.json
+  split:
+    method: programmatic_source_groups
+    group_key: source_image_id
+    seed: 42

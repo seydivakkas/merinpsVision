@@ -1,0 +1,13 @@
+experiment:
+  id: mvtec_ad_carpet_patchcore_baseline
+  dataset_config: configs/datasets/mvtec_carpet.yaml
+  model_config: configs/models/patchcore_baseline.yaml
+  sealed_test: true
+calibration:
+  split: validation
+  method: recall_at_fpr
+  target_normal_fpr: 0.05
+runtime:
+  device: auto
+  deterministic: true
+  seed: 42

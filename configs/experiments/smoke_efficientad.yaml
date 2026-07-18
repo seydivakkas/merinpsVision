@@ -1,0 +1,11 @@
+experiment:
+  id: fixture_efficientad_smoke
+  dataset_config: configs/datasets/fixture.yaml
+  model_config: configs/models/efficientad_challenger.yaml
+  purpose: pipeline_smoke_only
+  benchmark_claims_allowed: false
+trainer:
+  max_epochs: 1
+runtime:
+  device: auto
+  seed: 42

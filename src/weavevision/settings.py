@@ -1,0 +1,134 @@
+"""Side-effect-free application configuration loading."""
+
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Literal
+
+import yaml
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
+
+from weavevision.domain.errors import ConfigError
+
+
+class AppConfig(BaseModel):
+    """User-facing application configuration."""
+
+    model_config = ConfigDict(extra="forbid")
+    name: str = "WeaveVision"
+    organization_name: str | None = None
+    environment: str = "local"
+    language: str = "tr"
+    max_upload_mb: int = Field(default=200, gt=0)
+    telemetry: bool = False
+
+
+class PathConfig(BaseModel):
+    """Project-relative data and artifact paths."""
+
+    model_config = ConfigDict(extra="forbid")
+    data_root: Path = Path("data")
+    artifacts_root: Path = Path("artifacts")
+    database: Path = Path("artifacts/weavevision.sqlite3")
+
+
+class RuntimeConfig(BaseModel):
+    """Runtime device and determinism controls."""
+
+    model_config = ConfigDict(extra="forbid")
+    device: Literal["auto", "cpu", "cuda", "mps"] = "auto"
+    precision: str = "auto"
+    num_workers: int = Field(default=4, ge=0)
+    deterministic: bool = True
+    seed: int = 42
+
+
+class InferenceConfig(BaseModel):
+    """Image quality and tiled inference settings."""
+
+    model_config = ConfigDict(extra="forbid")
+    quality_gate_enabled: bool = True
+    tiling_enabled: bool = True
+    tile_size: tuple[int, int] = (512, 512)
+    tile_overlap: float = Field(default=0.25, ge=0.0, lt=1.0)
+    min_component_area_px: int = Field(default=16, ge=1)
+    heatmap_alpha: float = Field(default=0.45, ge=0.0, le=1.0)
+
+
+class ReportingConfig(BaseModel):
+    """Report artifact persistence switches."""
+
+    model_config = ConfigDict(extra="forbid")
+    save_original_copy: bool = False
+    save_heatmap: bool = True
+    save_mask: bool = True
+    save_overlay: bool = True
+
+
+class Settings(BaseModel):
+    """Validated application settings with resolved absolute paths."""
+
+    model_config = ConfigDict(extra="forbid")
+    project_root: Path
+    app: AppConfig
+    paths: PathConfig
+    runtime: RuntimeConfig
+    inference: InferenceConfig
+    reporting: ReportingConfig
+
+    def resolved_data_root(self) -> Path:
+        """Return the absolute data root without creating it."""
+        return self._resolve(self.paths.data_root)
+
+    def resolved_artifacts_root(self) -> Path:
+        """Return the absolute artifacts root without creating it."""
+        return self._resolve(self.paths.artifacts_root)
+
+    def resolved_database(self) -> Path:
+        """Return the absolute SQLite path without opening it."""
+        return self._resolve(self.paths.database)
+
+    def _resolve(self, path: Path) -> Path:
+        return path.resolve() if path.is_absolute() else (self.project_root / path).resolve()
+
+
+def find_project_root(start: Path | None = None) -> Path:
+    """Find the nearest parent containing the master specification.
+
+    Args:
+        start: Directory used as the upward search origin.
+
+    Returns:
+        Absolute repository root.
+
+    Raises:
+        ConfigError: If no repository root marker can be found.
+    """
+    current = (start or Path.cwd()).resolve()
+    for candidate in (current, *current.parents):
+        if (candidate / "WEAVEVISION_CURSOR_MASTER_BUILD_SPEC.md").is_file():
+            return candidate
+    raise ConfigError("WEAVEVISION_CURSOR_MASTER_BUILD_SPEC.md not found")
+
+
+def load_settings(config_path: Path | None = None) -> Settings:
+    """Load and validate YAML settings without import-time side effects.
+
+    Args:
+        config_path: Optional YAML configuration path.
+
+    Returns:
+        Fully validated settings with an explicit project root.
+
+    Raises:
+        ConfigError: If YAML cannot be read or fails schema validation.
+    """
+    root = find_project_root(config_path.parent if config_path else None)
+    path = config_path or root / "configs" / "app.yaml"
+    try:
+        payload = yaml.safe_load(path.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            raise ConfigError(f"configuration must be a mapping: {path}")
+        return Settings(project_root=root, **payload)
+    except (OSError, yaml.YAMLError, ValidationError) as exc:
+        raise ConfigError(f"invalid configuration {path}: {exc}") from exc

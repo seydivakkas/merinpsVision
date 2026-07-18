@@ -1,0 +1,15 @@
+dataset:
+  id: company_pattern_001
+  adapter: company
+  organization: null
+  pattern_id: required
+  camera_id: required
+  lighting_id: required
+  category: pattern_001
+  root: required
+  manifest_path: data/manifests/company_pattern_001.json
+  license_or_permission_ref: required
+  split:
+    method: group
+    group_key: capture_session
+    seed: 42

@@ -1,0 +1,23 @@
+---
+description: WeaveVision repository implementation rules
+alwaysApply: true
+---
+
+# WeaveVision Agent Rules
+
+- Read `WEAVEVISION_CURSOR_MASTER_BUILD_SPEC.md` before changing architecture.
+- Implement phases in the specified order.
+- Do not invent datasets, metrics, thresholds, model results, or business claims.
+- Do not use test data for training, model selection, or threshold calibration.
+- Keep UI thin; all logic must live in domain/services/inference/evaluation modules.
+- Every public function must be typed and documented.
+- Every external path must use `pathlib.Path`.
+- Never silently swallow exceptions.
+- Use structured logging and actionable error messages.
+- Preserve source-image identity in all splits and tile operations.
+- Never commit datasets, model weights, secrets, or generated reports.
+- Every new feature requires tests.
+- Run `ruff`, `mypy`, and `pytest` before declaring a phase complete.
+- Record real commands and outcomes in `docs/EXECUTION_LOG.md`.
+- Mark missing experiments as `NOT_RUN`, never as passed.
+- Continue autonomously unless blocked by license acceptance, missing external data, secrets, or hardware.

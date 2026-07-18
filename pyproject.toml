@@ -1,0 +1,98 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "weavevision"
+version = "0.1.0"
+description = "Carpet anomaly detection and quality analytics"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+license = {text = "Proprietary"}
+authors = [{name = "WeaveVision Contributors"}]
+dependencies = [
+  "anomalib[cu126,openvino]==2.5.0",
+  "torch==2.8.0",
+  "torchvision==0.23.0",
+  "streamlit>=1.49,<2",
+  "pydantic>=2.11,<3",
+  "pydantic-settings>=2.10,<3",
+  "PyYAML>=6.0,<7",
+  "numpy>=2.0,<3",
+  "pandas>=2.2,<4",
+  "Pillow>=11,<13",
+  "opencv-python-headless>=4.10,<5",
+  "scikit-image>=0.24,<1",
+  "scikit-learn>=1.6,<2",
+  "plotly>=6,<7",
+  "jinja2>=3.1,<4",
+  "typer>=0.16,<1",
+  "rich>=14,<15",
+  "orjson>=3.10,<4",
+  "filelock>=3.18,<4",
+  "psutil>=7,<8"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.4,<9",
+  "pytest-cov>=6.2,<7",
+  "pytest-xdist>=3.8,<4",
+  "ruff>=0.12,<1",
+  "mypy>=1.16,<2",
+  "pre-commit>=4.2,<5",
+  "types-PyYAML>=6.0",
+  "types-psutil>=7.0"
+]
+
+[project.scripts]
+weavevision = "weavevision.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/weavevision"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers --strict-config --basetemp=.pytest-tmp"
+testpaths = ["tests"]
+markers = [
+  "integration: integration tests",
+  "smoke: smoke tests",
+  "gpu: tests requiring CUDA"
+]
+
+[tool.coverage.run]
+source = ["weavevision"]
+omit = ["src/weavevision/ui/*", "src/weavevision/ui/pages/*"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
+ignore = ["B008"]
+allowed-confusables = ["ı"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["weavevision"]
+exclude = ["src/weavevision/ui/pages"]
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["cv2.*", "skimage.*", "sklearn.*", "plotly.*", "anomalib.*"]
+ignore_missing_imports = true
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cu126", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
+torchvision = [
+  { index = "pytorch-cu126", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true

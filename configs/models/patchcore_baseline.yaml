@@ -1,0 +1,15 @@
+model:
+  name: patchcore
+  backbone: wide_resnet50_2
+  layers: [layer2, layer3]
+  coreset_sampling_ratio: 0.1
+  num_neighbors: 9
+  pre_trained: true
+preprocessing:
+  image_size: [512, 512]
+  center_crop: null
+  tiling:
+    enabled: true
+    tile_size: [512, 512]
+    stride: [384, 384]
+seed: 42

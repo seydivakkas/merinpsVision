@@ -1,0 +1,11 @@
+experiment:
+  id: fixture_patchcore_smoke
+  dataset_config: configs/datasets/fixture.yaml
+  model_config: configs/models/patchcore_baseline.yaml
+  purpose: pipeline_smoke_only
+  benchmark_claims_allowed: false
+trainer:
+  max_epochs: 1
+runtime:
+  device: cpu
+  seed: 42

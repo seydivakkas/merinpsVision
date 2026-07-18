@@ -1,0 +1,12 @@
+model:
+  name: efficient_ad
+  imagenet_dir: data/external/imagenette
+  model_size: small
+  teacher_out_channels: 384
+  padding: false
+trainer:
+  max_epochs: 100
+data:
+  train_batch_size: 1
+  eval_batch_size: 1
+seed: 42

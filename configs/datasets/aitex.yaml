@@ -1,0 +1,10 @@
+dataset:
+  id: aitex
+  adapter: aitex
+  category: fabric
+  root: data/external/aitex_normalized
+  manifest_path: data/manifests/aitex.json
+  split:
+    method: group_before_tiling
+    group_key: source_image_id
+    seed: 42

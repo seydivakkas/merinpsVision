@@ -1,0 +1,17 @@
+experiment:
+  id: robustness_suite
+  baseline_run_id: required
+brightness:
+  factors: [0.7, 0.85, 1.15, 1.3]
+contrast:
+  factors: [0.7, 0.85, 1.15, 1.3]
+gaussian_noise:
+  sigma: [5, 10, 20]
+blur:
+  kernel: [3, 5, 7]
+jpeg:
+  quality: [95, 75, 50]
+rotation:
+  degrees: [-5, 5]
+downsample:
+  scale: [0.75, 0.5]

@@ -1,0 +1,11 @@
+{
+    "schema_version": 2,
+    "commit": "HEAD",
+    "indexed_at": "2026-07-18T00:28:14Z",
+    "project": "weavevision",
+    "nodes": 897,
+    "edges": 3484,
+    "original_size": 2949120,
+    "compressed_size": 570065,
+    "compression_level": 9
+}

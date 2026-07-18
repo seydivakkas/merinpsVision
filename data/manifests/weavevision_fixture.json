@@ -1,0 +1,251 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_id": "weavevision_fixture",
+  "source": {
+    "name": "Programmatic WeaveVision Fixture",
+    "category": "synthetic_textile",
+    "license": "Project test fixture",
+    "commercial_use": true,
+    "retrieved_at": "2026-07-18T00:26:54.550216Z",
+    "source_url": "local:scripts/generate_fixtures.py"
+  },
+  "counts": {
+    "images_total": 20,
+    "train_normal": 12,
+    "validation_normal": 0,
+    "validation_anomaly": 0,
+    "test_normal": 4,
+    "test_anomaly": 4,
+    "masks": 4
+  },
+  "split_policy": {
+    "method": "programmatic train/test; normal-only provisional calibration",
+    "seed": 42,
+    "group_key": "source_image_id",
+    "test_used_for_calibration": false
+  },
+  "files": [
+    {
+      "relative_path": "train/good/train_000.png",
+      "sha256": "3986685c593ec0c56fbb6759dbb48eac1c65f5687a84d810b113b8b1719b2752",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "train",
+      "defect_type": null,
+      "mask_path": null,
+      "source_image_id": "train_000"
+    },
+    {
+      "relative_path": "train/good/train_001.png",
+      "sha256": "0622564d25c87de9fdaf97dc2b3778eb789ec05e210480a3bf21d7c04d6b5ca2",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "train",
+      "defect_type": null,
+      "mask_path": null,
+      "source_image_id": "train_001"
+    },
+    {
+      "relative_path": "train/good/train_002.png",
+      "sha256": "a617daae663530a6d114ac08004145c587f54c990fe2756842945ee22f463d4c",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "train",
+      "defect_type": null,
+      "mask_path": null,
+      "source_image_id": "train_002"
+    },
+    {
+      "relative_path": "train/good/train_003.png",
+      "sha256": "85ec2de75b3709344bd519a1dab25715ee81762b25a97d00d4711ea8f12f521d",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "train",
+      "defect_type": null,
+      "mask_path": null,
+      "source_image_id": "train_003"
+    },
+    {
+      "relative_path": "train/good/train_004.png",
+      "sha256": "07cd99fa4cff9e61ae9242332d573a6c07022544111521d71ce392e4d05cb659",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "train",
+      "defect_type": null,
+      "mask_path": null,
+      "source_image_id": "train_004"
+    },
+    {
+      "relative_path": "train/good/train_005.png",
+      "sha256": "71bcadaf9ad53cc1be0f4121ada0ed0e9dea8276f46075acf52e3417ad87fb87",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "train",
+      "defect_type": null,
+      "mask_path": null,
+      "source_image_id": "train_005"
+    },
+    {
+      "relative_path": "train/good/train_006.png",
+      "sha256": "3da1aade0284fc9e61ff25214437f90f8dc2cbbf09131917fd93e083e9ffe3bd",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "train",
+      "defect_type": null,
+      "mask_path": null,
+      "source_image_id": "train_006"
+    },
+    {
+      "relative_path": "train/good/train_007.png",
+      "sha256": "35bfa9e9bda12d87f8bf6199f861b909e78e43c60b4f348fb6ffdc29b733638f",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "train",
+      "defect_type": null,
+      "mask_path": null,
+      "source_image_id": "train_007"
+    },
+    {
+      "relative_path": "train/good/train_008.png",
+      "sha256": "b86319f719f6268c326c50af59bbed687c910618554bba1f30a007f7d1db69c8",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "train",
+      "defect_type": null,
+      "mask_path": null,
+      "source_image_id": "train_008"
+    },
+    {
+      "relative_path": "train/good/train_009.png",
+      "sha256": "de6611e4e630a596c56ba324aad930604ddde891f4c051da0bd5b5454f4a7b18",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "train",
+      "defect_type": null,
+      "mask_path": null,
+      "source_image_id": "train_009"
+    },
+    {
+      "relative_path": "train/good/train_010.png",
+      "sha256": "9b76c2163770edd3582dcc97c667358805f1b7fa37d153112f0bd0efc8402be2",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "train",
+      "defect_type": null,
+      "mask_path": null,
+      "source_image_id": "train_010"
+    },
+    {
+      "relative_path": "train/good/train_011.png",
+      "sha256": "f75cbbdc2347d9f7adb92242c798d5165ba776c627f8c338f972f1ce0b92644d",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "train",
+      "defect_type": null,
+      "mask_path": null,
+      "source_image_id": "train_011"
+    },
+    {
+      "relative_path": "test/good/good_000.png",
+      "sha256": "37cb5c58abfa0ec978fda70d404ee4da437efdb7ab6e4ae7ac5ab4fecae7e5f3",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "test",
+      "defect_type": "good",
+      "mask_path": null,
+      "source_image_id": "good_000"
+    },
+    {
+      "relative_path": "test/good/good_001.png",
+      "sha256": "0e306d5fcd0049b8e55d78031c9eedad62561ba9f9da31bf05b58d7deb635338",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "test",
+      "defect_type": "good",
+      "mask_path": null,
+      "source_image_id": "good_001"
+    },
+    {
+      "relative_path": "test/good/good_002.png",
+      "sha256": "f44d08f474c5503e71247165caa16833ee22bdf9825d8d172d352b626efd5f63",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "test",
+      "defect_type": "good",
+      "mask_path": null,
+      "source_image_id": "good_002"
+    },
+    {
+      "relative_path": "test/good/good_003.png",
+      "sha256": "abb10c53a9e76670769b16b58e909c9993792b77017130936e1b6eb5059f4828",
+      "width": 128,
+      "height": 128,
+      "label": "normal",
+      "split": "test",
+      "defect_type": "good",
+      "mask_path": null,
+      "source_image_id": "good_003"
+    },
+    {
+      "relative_path": "test/weave_break/defect_000.png",
+      "sha256": "46e11323f3008f7f7418543e1640edaae0d01dc917c350fa85f39896f8b41731",
+      "width": 128,
+      "height": 128,
+      "label": "anomaly",
+      "split": "test",
+      "defect_type": "weave_break",
+      "mask_path": "ground_truth/weave_break/defect_000_mask.png",
+      "source_image_id": "defect_000"
+    },
+    {
+      "relative_path": "test/weave_break/defect_001.png",
+      "sha256": "1f7d5ef018033021366fb1d16c80137c7de9b18917a9f2d6ae358dc0f7542183",
+      "width": 128,
+      "height": 128,
+      "label": "anomaly",
+      "split": "test",
+      "defect_type": "weave_break",
+      "mask_path": "ground_truth/weave_break/defect_001_mask.png",
+      "source_image_id": "defect_001"
+    },
+    {
+      "relative_path": "test/weave_break/defect_002.png",
+      "sha256": "afbb78afd5d6698037b05f262071cf3f3570b12220021461cea3a26f69313c9e",
+      "width": 128,
+      "height": 128,
+      "label": "anomaly",
+      "split": "test",
+      "defect_type": "weave_break",
+      "mask_path": "ground_truth/weave_break/defect_002_mask.png",
+      "source_image_id": "defect_002"
+    },
+    {
+      "relative_path": "test/weave_break/defect_003.png",
+      "sha256": "7ec32cc22b85b879f8e507c2aaf4f39c00aa49c57cd70c9692be89d8146ce30d",
+      "width": 128,
+      "height": 128,
+      "label": "anomaly",
+      "split": "test",
+      "defect_type": "weave_break",
+      "mask_path": "ground_truth/weave_break/defect_003_mask.png",
+      "source_image_id": "defect_003"
+    }
+  ],
+  "verification_status": "VERIFIED",
+  "manifest_sha256": "37b83f2288cd71d00404448c13f6730759789d82c244d0af9db3e2c653fff459"
+}

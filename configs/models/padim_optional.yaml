@@ -1,0 +1,6 @@
+model:
+  name: padim
+  backbone: resnet18
+  layers: [layer1, layer2, layer3]
+status: optional_after_primary_comparison
+seed: 42

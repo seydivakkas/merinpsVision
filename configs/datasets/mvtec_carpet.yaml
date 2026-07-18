@@ -1,0 +1,12 @@
+dataset:
+  id: mvtec_ad_carpet
+  adapter: mvtec_ad
+  category: carpet
+  root: data/external/mvtec_ad
+  manifest_path: data/manifests/mvtec_ad_carpet.json
+  license_acceptance_required: true
+  commercial_use: false
+  split:
+    method: official_train_test_with_grouped_train_validation
+    group_key: source_image_id
+    seed: 42

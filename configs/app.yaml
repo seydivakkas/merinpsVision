@@ -1,0 +1,29 @@
+app:
+  name: WeaveVision
+  organization_name: null
+  environment: local
+  language: tr
+  max_upload_mb: 200
+  telemetry: false
+paths:
+  data_root: data
+  artifacts_root: artifacts
+  database: artifacts/weavevision.sqlite3
+runtime:
+  device: auto
+  precision: auto
+  num_workers: 4
+  deterministic: true
+  seed: 42
+inference:
+  quality_gate_enabled: true
+  tiling_enabled: true
+  tile_size: [512, 512]
+  tile_overlap: 0.25
+  min_component_area_px: 16
+  heatmap_alpha: 0.45
+reporting:
+  save_original_copy: false
+  save_heatmap: true
+  save_mask: true
+  save_overlay: true
