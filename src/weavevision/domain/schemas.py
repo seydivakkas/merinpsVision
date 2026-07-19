@@ -9,12 +9,19 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from weavevision.domain.enums import (
+    CanaryStatus,
     DatasetVerificationStatus,
     Decision,
+    DriftPattern,
     ExperimentStatus,
+    FeedbackVerdict,
+    IncidentPriority,
     ModelStatus,
     QualityGateStatus,
+    RetrainingStrategy,
     ReviewPriority,
+    RollbackReason,
+    TrendStatus,
 )
 
 
@@ -253,3 +260,123 @@ class BenchmarkResult(ContractModel):
     latency_ms: dict[str, float] = Field(default_factory=dict)
     restrictions: list[str] = Field(default_factory=list)
     environment: dict[str, Any] = Field(default_factory=dict)
+
+
+# ---------------------------------------------------------------------------
+# Drift lifecycle schemas (M1)
+# ---------------------------------------------------------------------------
+
+
+class DriftWindow(ContractModel):
+    """Audit record for one metric monitoring window."""
+
+    window_id: str
+    model_id: str
+    threshold_id: str | None = None
+    metric_name: str
+    window_start: datetime
+    window_end: datetime
+    metric_value: float | None = None
+    ewma_value: float | None = None
+    cusum_value: float | None = None
+    psi_value: float | None = None
+    bbsd_mmd: float | None = None
+    uae_p95_error: float | None = None
+    trend_status: TrendStatus
+    drift_pattern: DriftPattern
+    source_manifest_sha256: str | None = None
+    created_at: datetime
+
+
+class TrendPoint(ContractModel):
+    """Single observation within a downward-drift trend series."""
+
+    index: int = Field(ge=1)
+    value: float
+    ewma: float
+    ewma_lower_limit: float
+    cusum_down: float = Field(ge=0.0)
+    ewma_alert: bool
+    cusum_alert: bool
+    status: TrendStatus
+
+
+class IncidentRecord(ContractModel):
+    """Audit record for an opened drift incident."""
+
+    incident_id: str
+    priority: IncidentPriority
+    drift_pattern: DriftPattern
+    root_cause: str | None = None
+    affected_window_id: str
+    model_id: str
+    threshold_id: str | None = None
+    action_taken: str | None = None
+    resolved_at: datetime | None = None
+    created_at: datetime
+
+
+class TriageDecision(ContractModel):
+    """Evidence summary for a 2-of-N confirming signal triage decision."""
+
+    decision_id: str
+    incident_id: str
+    confirming_signal_count: int = Field(ge=0, le=6)
+    evidence: dict[str, bool] = Field(default_factory=dict)
+    reviewer: str | None = None
+    created_at: datetime
+
+
+class RetrainingRequest(ContractModel):
+    """Governed request to retrain or fine-tune a model."""
+
+    request_id: str
+    trigger_id: str
+    strategy: RetrainingStrategy
+    target_model_family: str
+    min_target_images: int = Field(gt=0)
+    min_labeled_validation_images: int = Field(gt=0)
+    status: ExperimentStatus
+    created_at: datetime
+
+
+class LabelingQueueItem(ContractModel):
+    """Active-learning candidate item queued for expert labeling."""
+
+    item_id: str
+    image_sha256: str
+    source_path: Path
+    priority_bucket: Literal["P0", "P1", "P2", "P3"]
+    selection_reason: str
+    drift_score: float | None = None
+    uncertainty_score: float | None = None
+    assigned_reviewer: str | None = None
+    verdict: FeedbackVerdict | None = None
+    created_at: datetime
+    reviewed_at: datetime | None = None
+
+
+class CanaryEvaluation(ContractModel):
+    """Parallel champion-vs-challenger canary comparison result."""
+
+    canary_id: str
+    champion_model_id: str
+    challenger_model_id: str
+    sample_count: int = Field(ge=0)
+    disagreement_rate: float = Field(ge=0.0, le=1.0)
+    critical_recall_delta: float
+    latency_p95_ms: float = Field(ge=0.0)
+    status: CanaryStatus
+    created_at: datetime
+
+
+class RollbackEvent(ContractModel):
+    """Immutable audit record for a model registry rollback."""
+
+    rollback_id: str
+    from_model_id: str
+    to_model_id: str
+    reason: RollbackReason
+    triggered_by: str
+    incident_id: str | None = None
+    created_at: datetime

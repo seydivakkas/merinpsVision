@@ -67,3 +67,65 @@ class DatasetVerificationStatus(StrEnum):
     VERIFIED = "VERIFIED"
     BLOCKED = "BLOCKED"
     INVALID = "INVALID"
+
+
+# ---------------------------------------------------------------------------
+# Drift lifecycle enumerations (M1)
+# ---------------------------------------------------------------------------
+
+
+class DriftPattern(StrEnum):
+    """Observed drift pattern classification used in incident triage."""
+
+    STABLE = "STABLE"
+    SUDDEN = "SUDDEN"
+    GRADUAL = "GRADUAL"
+    SEMANTIC = "SEMANTIC"
+    TECHNICAL = "TECHNICAL"
+
+
+class TrendStatus(StrEnum):
+    """Combined EWMA + CUSUM alert state for a single monitoring window."""
+
+    STABLE = "STABLE"
+    EWMA_ALERT = "EWMA_ALERT"
+    CUSUM_ALERT = "CUSUM_ALERT"
+    BOTH_ALERT = "BOTH_ALERT"
+
+
+class IncidentPriority(StrEnum):
+    """Operational incident priority derived from confirming signal count."""
+
+    INFO = "INFO"
+    P2_REVIEW = "P2_REVIEW"
+    P1_INCIDENT = "P1_INCIDENT"
+    P0_BLOCKED = "P0_BLOCKED"
+
+
+class RetrainingStrategy(StrEnum):
+    """Retraining strategy chosen during incident triage."""
+
+    NONE = "NONE"
+    FINE_TUNE = "FINE_TUNE"
+    FULL_RETRAIN = "FULL_RETRAIN"
+    CONTINUAL = "CONTINUAL"
+
+
+class CanaryStatus(StrEnum):
+    """Canary evaluation lifecycle state."""
+
+    NOT_RUN = "NOT_RUN"
+    RUNNING = "RUNNING"
+    PASSED = "PASSED"
+    FAILED = "FAILED"
+
+
+class RollbackReason(StrEnum):
+    """Reason that triggered a model rollback event."""
+
+    HASH_MISMATCH = "HASH_MISMATCH"
+    RECALL_DROP = "RECALL_DROP"
+    FP_SPIKE = "FP_SPIKE"
+    LATENCY = "LATENCY"
+    DRIFT_WORSENING = "DRIFT_WORSENING"
+    SAFETY_ALARM = "SAFETY_ALARM"
