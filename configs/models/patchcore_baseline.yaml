@@ -1,10 +1,18 @@
+# RTX 4070 Laptop GPU (8GB VRAM) özelleştirilmiş ayarlar
+# coreset_sampling_ratio: 0.1 (Anomalib varsayılanı) → OOM riski; 0.02 kullan
 model:
   name: patchcore
   backbone: wide_resnet50_2
   layers: [layer2, layer3]
-  coreset_sampling_ratio: 0.1
+  coreset_sampling_ratio: 0.02  # RTX 4070 8GB: max %2 (varsayılan %10 OOM'a düşürür)
   num_neighbors: 9
   pre_trained: true
+trainer:
+  max_epochs: 1  # smoke testinde 1 epoch; tam eğitimde artır
+  precision: bf16-mixed  # Ada Lovelace bfloat16 native (float16 değil)
+data:
+  train_batch_size: 2  # 8GB VRAM için güvenli başlangıç; OOM'da 1'e düşür
+  eval_batch_size: 4
 preprocessing:
   image_size: [512, 512]
   center_crop: null
