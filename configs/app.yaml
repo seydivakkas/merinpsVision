@@ -47,4 +47,8 @@ drift:
   sudden_drop_review_pp: 2.0
   sudden_drop_incident_pp: 5.0
   sudden_drop_block_pp: 10.0
+  # Canary evaluation thresholds (M7)
+  # challenger is rejected when disagreement_rate > max OR recall_delta < min
+  canary_max_disagreement_rate: 0.05
+  canary_min_recall_delta: -0.02
 

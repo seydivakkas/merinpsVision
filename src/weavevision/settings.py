@@ -87,6 +87,9 @@ class DriftPolicyConfig(BaseModel):
     sudden_drop_review_pp: float = Field(default=2.0, gt=0.0)
     sudden_drop_incident_pp: float = Field(default=5.0, gt=0.0)
     sudden_drop_block_pp: float = Field(default=10.0, gt=0.0)
+    # Canary evaluation thresholds (M7)
+    canary_max_disagreement_rate: float = Field(default=0.05, ge=0.0, le=1.0)
+    canary_min_recall_delta: float = Field(default=-0.02)
 
 
 class Settings(BaseModel):
