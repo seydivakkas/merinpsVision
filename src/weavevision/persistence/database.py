@@ -9,7 +9,7 @@ from pathlib import Path
 
 from weavevision.domain.errors import DatabaseError
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 
 class Database:
@@ -98,6 +98,76 @@ class Database:
                     pixel_threshold REAL NOT NULL,
                     method TEXT NOT NULL,
                     status TEXT NOT NULL,
+                    created_at TEXT NOT NULL
+                );
+                -- ---------------------------------------------------------
+                -- Drift lifecycle tables (M4, schema_version=2)
+                -- All CREATE TABLE statements are idempotent.
+                -- ---------------------------------------------------------
+                CREATE TABLE IF NOT EXISTS drift_windows (
+                    window_id TEXT PRIMARY KEY,
+                    model_id TEXT NOT NULL,
+                    threshold_id TEXT,
+                    metric_name TEXT NOT NULL,
+                    window_start TEXT NOT NULL,
+                    window_end TEXT NOT NULL,
+                    metric_value REAL,
+                    ewma_value REAL,
+                    cusum_value REAL,
+                    psi_value REAL,
+                    bbsd_mmd REAL,
+                    uae_p95_error REAL,
+                    trend_status TEXT NOT NULL,
+                    drift_pattern TEXT NOT NULL,
+                    source_manifest_sha256 TEXT,
+                    created_at TEXT NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS drift_incidents (
+                    incident_id TEXT PRIMARY KEY,
+                    priority TEXT NOT NULL,
+                    drift_pattern TEXT NOT NULL,
+                    root_cause TEXT,
+                    affected_window_id TEXT NOT NULL,
+                    model_id TEXT NOT NULL,
+                    threshold_id TEXT,
+                    action_taken TEXT,
+                    resolved_at TEXT,
+                    created_at TEXT NOT NULL,
+                    FOREIGN KEY (affected_window_id)
+                        REFERENCES drift_windows(window_id)
+                );
+                CREATE TABLE IF NOT EXISTS labeling_queue (
+                    item_id TEXT PRIMARY KEY,
+                    image_sha256 TEXT NOT NULL,
+                    source_path TEXT NOT NULL,
+                    priority_bucket TEXT NOT NULL
+                        CHECK (priority_bucket IN ('P0','P1','P2','P3')),
+                    selection_reason TEXT NOT NULL,
+                    drift_score REAL,
+                    uncertainty_score REAL,
+                    assigned_reviewer TEXT,
+                    verdict TEXT,
+                    created_at TEXT NOT NULL,
+                    reviewed_at TEXT
+                );
+                CREATE TABLE IF NOT EXISTS canary_runs (
+                    canary_id TEXT PRIMARY KEY,
+                    champion_model_id TEXT NOT NULL,
+                    challenger_model_id TEXT NOT NULL,
+                    sample_count INTEGER NOT NULL DEFAULT 0,
+                    disagreement_rate REAL NOT NULL DEFAULT 0.0,
+                    critical_recall_delta REAL NOT NULL DEFAULT 0.0,
+                    latency_p95_ms REAL NOT NULL DEFAULT 0.0,
+                    status TEXT NOT NULL,
+                    created_at TEXT NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS rollback_events (
+                    rollback_id TEXT PRIMARY KEY,
+                    from_model_id TEXT NOT NULL,
+                    to_model_id TEXT NOT NULL,
+                    reason TEXT NOT NULL,
+                    triggered_by TEXT NOT NULL,
+                    incident_id TEXT,
                     created_at TEXT NOT NULL
                 );
                 """
