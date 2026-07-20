@@ -65,6 +65,30 @@ class ReportingConfig(BaseModel):
     save_overlay: bool = True
 
 
+class DriftPolicyConfig(BaseModel):
+    """Drift monitoring and alert policy thresholds.
+
+    Loaded from ``configs/app.yaml -> drift``.  All default values are
+    initial policies -- calibrate against operational-validation data only.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+    # EWMA/CUSUM parameters
+    ewma_lambda: float = Field(default=0.25, gt=0.0, le=1.0)
+    ewma_limit_sigma: float = Field(default=3.0, gt=0.0)
+    cusum_k_sigma: float = Field(default=0.25, gt=0.0)
+    cusum_h_sigma: float = Field(default=4.0, gt=0.0)
+    # PSI thresholds
+    psi_medium_threshold: float = Field(default=0.10, gt=0.0)
+    psi_high_threshold: float = Field(default=0.25, gt=0.0)
+    # Triage
+    retraining_min_confirming_signals: int = Field(default=2, ge=1, le=6)
+    # Sudden-drop thresholds (same unit as the monitored metric)
+    sudden_drop_review_pp: float = Field(default=2.0, gt=0.0)
+    sudden_drop_incident_pp: float = Field(default=5.0, gt=0.0)
+    sudden_drop_block_pp: float = Field(default=10.0, gt=0.0)
+
+
 class Settings(BaseModel):
     """Validated application settings with resolved absolute paths."""
 
@@ -75,6 +99,7 @@ class Settings(BaseModel):
     runtime: RuntimeConfig
     inference: InferenceConfig
     reporting: ReportingConfig
+    drift: DriftPolicyConfig = Field(default_factory=DriftPolicyConfig)
 
     def resolved_data_root(self) -> Path:
         """Return the absolute data root without creating it."""

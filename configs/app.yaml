@@ -27,3 +27,24 @@ reporting:
   save_heatmap: true
   save_mask: true
   save_overlay: true
+# ---------------------------------------------------------------------------
+# Drift monitoring & alert policy (M3)
+# All values are INITIAL POLICIES.
+# Calibrate against operational-validation data ONLY -- never against test set.
+# ---------------------------------------------------------------------------
+drift:
+  # EWMA / CUSUM parameters (see evaluation/trend_monitor.py)
+  ewma_lambda: 0.25
+  ewma_limit_sigma: 3.0
+  cusum_k_sigma: 0.25
+  cusum_h_sigma: 4.0
+  # PSI thresholds (see evaluation/psi.py)
+  psi_medium_threshold: 0.10
+  psi_high_threshold: 0.25
+  # Incident triage: min independent signals before retraining request
+  retraining_min_confirming_signals: 2
+  # Sudden-drop classification (same unit as monitored metric)
+  sudden_drop_review_pp: 2.0
+  sudden_drop_incident_pp: 5.0
+  sudden_drop_block_pp: 10.0
+
