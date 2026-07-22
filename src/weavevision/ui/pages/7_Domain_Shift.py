@@ -18,7 +18,7 @@ st.caption(
 )
 
 settings = load_settings()
-db = Database(settings.resolved_database_path())
+db = Database(settings.resolved_database())
 db.migrate()
 repo = DriftWindowRepository(db)
 

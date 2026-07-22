@@ -124,6 +124,10 @@ class Settings(BaseModel):
         """Return the absolute SQLite path without opening it."""
         return self._resolve(self.paths.database)
 
+    def resolved_database_path(self) -> Path:
+        """Alias for resolved_database."""
+        return self.resolved_database()
+
     def _resolve(self, path: Path) -> Path:
         return path.resolve() if path.is_absolute() else (self.project_root / path).resolve()
 
