@@ -9,7 +9,9 @@ model:
   pre_trained: true
 trainer:
   max_epochs: 1  # smoke testinde 1 epoch; tam eğitimde artır
-  precision: bf16-mixed  # Ada Lovelace bfloat16 native (float16 değil)
+  # Anomalib 2.5 PatchCore, bf16-mixed sonrasında OpenVINO export edemiyor.
+  # Bu nedenle eğitim ve export aynı güvenli hassaslıkta kalır.
+  precision: 32-true
 data:
   train_batch_size: 2  # 8GB VRAM için güvenli başlangıç; OOM'da 1'e düşür
   eval_batch_size: 4

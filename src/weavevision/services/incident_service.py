@@ -123,6 +123,20 @@ class IncidentService:
         """
         return self._repo.list_open()
 
+    def resolve(
+        self,
+        incident_id: str,
+        *,
+        action_taken: str | None = None,
+    ) -> None:
+        """Mark an incident as resolved.
+
+        Args:
+            incident_id: Identifier of the incident to close.
+            action_taken: Optional description of the remediation taken.
+        """
+        self._repo.resolve(incident_id, action_taken=action_taken)
+
 
 def _signal_count_to_priority(signal_count: int) -> IncidentPriority:
     """Map a confirming signal count to an ``IncidentPriority``.

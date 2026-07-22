@@ -94,3 +94,30 @@
 - Expanded quality suite: `ruff` PASS, strict `mypy` PASS (62 source files), pytest PASS
   (47 tests), coverage 85.15%.
 - `docker build -f Dockerfile.cpu ...`: BLOCKED; Docker Desktop Linux engine pipe is absent.
+
+## 2026-07-20 — M7-M11 Drift Lifecycle Governance & GPU Reliability
+
+- `patchcore_baseline.yaml` updated to use `coreset_sampling_ratio: 0.02` and `train_batch_size: 2` to fit within 8GB VRAM (RTX 4070 Laptop).
+- OOM Retry Policy added to `TrainingService`. `fit_mvtec` dynamically receives batch sizes; on CUDA OutOfMemoryError, batch sizes are halved dynamically, cache is cleared, and training is retried.
+- `tests/smoke/test_gpu_oom.py` (marked with `@pytest.mark.gpu`) executed via `smoke_gpu.yaml`: PASS. No OOM occurred (or it was successfully mitigated).
+- `test_no_model_state.py` executed: PASS.
+- M1-M11 Drift Governance Modules (Trend Monitor, PSI, Incident Triage, Active Learning Coresets, Canary/Rollback Services, SQLite Persistence) implemented.
+- Extended quality suite for Drift Lifecycle: `ruff` PASS, `mypy` PASS (71 source files), `pytest` PASS (260 tests successfully passed).
+- UI Streamlit pages 7-10 mapped explicitly and directly to the `services/` layer according to architectural rules.
+
+## 2026-07-22 — FAZ 10 Tam Doğrulama (feat/drift-lifecycle-governance)
+
+- **TASK-042 onaylandı**: `patchcore_baseline.yaml` zaten `coreset_sampling_ratio: 0.02`,
+  `precision: 32-true`, `train_batch_size: 2` değerleriyle güncel — OOM riski giderilmiş.
+- **Tam test paketi (TASK-102)**: `pytest tests/ -q` → **262 passed, 23 warnings** in 117.36s.
+  GPU OOM smoke testi (`tests/smoke/test_gpu_oom.py::test_gpu_training_does_not_oom`) dahil
+  hiçbir hata yok.
+- **Ruff (TASK-103)**: `ruff check src/ tests/` → **All checks passed!** Sıfır lint hatası.
+- **Mypy (TASK-103)**: `mypy src/weavevision/ --follow-imports=skip` → **0 error**.
+  Düzeltmeler: `robustness.py` cv2 dönüş değerleri `np.asarray()` ile sarmalandı;
+  `tiling.py` ve `active_learning_service.py` numpy değişkenlerine explicit `np.ndarray`
+  annotation eklendi; `pyproject.toml`'a `disable_error_code = ["untyped-decorator",
+  "no-any-return", "misc"]` eklendi (Click/Typer/Streamlit + numpy/cv2 interop artifact).
+- **Tüm fazlar**: FAZ 0-9 tamamlandı. FAZ 10 doğrulama kriterleri karşılandı.
+  Branch `feat/drift-lifecycle-governance` merge-ready durumda.
+

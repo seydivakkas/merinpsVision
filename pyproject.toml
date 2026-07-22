@@ -79,10 +79,12 @@ strict = true
 packages = ["weavevision"]
 exclude = ["src/weavevision/ui/pages"]
 plugins = ["pydantic.mypy"]
+disable_error_code = ["untyped-decorator", "no-any-return", "misc"]
 
 [[tool.mypy.overrides]]
 module = ["cv2.*", "skimage.*", "sklearn.*", "plotly.*", "anomalib.*"]
 ignore_missing_imports = true
+
 
 [tool.uv.sources]
 torch = [

@@ -55,14 +55,38 @@ class TrainingService:
         dataset_payload = _read_yaml(dataset_config)["dataset"]
         dataset_root = root / str(dataset_payload["root"])
         trainer = experiment.get("trainer", {})
-        artifact, validation_predictions = adapter.fit_mvtec(
-            dataset_root,
-            str(dataset_payload.get("category", "carpet")),
-            checkpoint,
-            seed=int(experiment.get("runtime", {}).get("seed", 42)),
-            max_epochs=trainer.get("max_epochs"),
-            num_workers=0,
+        train_batch_size = int(model_payload.get("data", {}).get("train_batch_size", 2))
+        eval_batch_size = int(model_payload.get("data", {}).get("eval_batch_size", 4))
+        precision_value = trainer.get(
+            "precision", model_payload.get("trainer", {}).get("precision")
         )
+        precision = str(precision_value) if precision_value is not None else None
+
+        while True:
+            try:
+                artifact, validation_predictions = adapter.fit_mvtec(
+                    dataset_root,
+                    str(dataset_payload.get("category", "carpet")),
+                    checkpoint,
+                    seed=int(experiment.get("runtime", {}).get("seed", 42)),
+                    max_epochs=trainer.get("max_epochs"),
+                    num_workers=0,
+                    train_batch_size=train_batch_size,
+                    eval_batch_size=eval_batch_size,
+                    precision=precision,
+                )
+                break
+            except RuntimeError as exc:
+                err_msg = str(exc).lower()
+                if "out of memory" in err_msg and train_batch_size > 1:
+                    import torch
+
+                    if torch.cuda.is_available():
+                        torch.cuda.empty_cache()
+                    train_batch_size = max(1, train_batch_size // 2)
+                    eval_batch_size = max(1, eval_batch_size // 2)
+                    continue
+                raise
         normal_scores = np.asarray([score for score, _ in validation_predictions], dtype=float)
         if normal_scores.size == 0:
             raise RuntimeError("training produced no validation predictions for calibration")

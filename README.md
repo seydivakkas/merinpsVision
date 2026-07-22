@@ -1,5 +1,7 @@
 # WeaveVision — Carpet Anomaly Detection and Quality Analytics
 
+![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-red?style=flat-square)
+
 WeaveVision is a local-first, modular-monolith application for one-class visual anomaly
 detection on carpet and textile images. It separates dataset governance, model experiments,
 inference, audit persistence, reporting, and the Streamlit interface.
@@ -79,11 +81,11 @@ Analysis services emit JSON, CSV, HTML, heatmap, mask, and overlay artifacts und
 
 This table is updated only from generated evidence artifacts.
 
-## License restrictions
+## License
 
-Repository code is currently marked proprietary pending an authorized license decision.
-MVTec AD data is governed by its official license and must not be treated as commercial
-company data. Check `docs/DATASET_AND_LICENSE_REGISTER.md` before use.
+![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-red?style=flat-square)
+
+ÖZEL LİSANS — TÜM HAKLAR SAKLIDIR. Telif Hakkı (c) 2026 Seydi Eryılmaz (@seydivakkas). Bu yazılım yalnızca görüntüleme ve kişisel öğrenim amacıyla paylaşılmıştır. Yazarın açık yazılı izni olmaksızın kopyalanamaz, çoğaltılamaz, dağıtılamaz, ticari veya ticari olmayan projelerde kullanılamaz, değiştirilemez veya satılamaz.
 
 ## Limitations
 

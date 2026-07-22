@@ -186,3 +186,27 @@ class IncidentRepository:
                 "SELECT * FROM drift_incidents WHERE resolved_at IS NULL ORDER BY created_at DESC"
             ).fetchall()
             return [dict(row) for row in rows]
+
+    def resolve(
+        self,
+        incident_id: str,
+        *,
+        action_taken: str | None = None,
+    ) -> None:
+        """Mark an incident as resolved by setting resolved_at.
+
+        Args:
+            incident_id: Identifier of the incident to close.
+            action_taken: Optional human-readable remediation description.
+        """
+        with self.database.connect() as connection:
+            connection.execute(
+                """UPDATE drift_incidents
+                   SET resolved_at = ?, action_taken = ?
+                   WHERE incident_id = ?""",
+                (
+                    datetime.now(UTC).isoformat(),
+                    action_taken,
+                    incident_id,
+                ),
+            )

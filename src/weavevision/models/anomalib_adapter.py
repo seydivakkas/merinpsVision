@@ -47,6 +47,9 @@ class AnomalibAdapter:
         seed: int = 42,
         max_epochs: int | None = None,
         num_workers: int = 0,
+        train_batch_size: int = 1,
+        eval_batch_size: int = 1,
+        precision: str | None = None,
     ) -> tuple[Path, list[tuple[float, np.ndarray]]]:
         """Fit on normal MVTec-style training data and return validation predictions.
 
@@ -60,8 +63,8 @@ class AnomalibAdapter:
         datamodule = MVTecAD(
             root=dataset_root,
             category=category,
-            train_batch_size=1,
-            eval_batch_size=1,
+            train_batch_size=train_batch_size,
+            eval_batch_size=eval_batch_size,
             num_workers=num_workers,
             val_split_mode="from_train",
             val_split_ratio=0.2,
@@ -75,6 +78,8 @@ class AnomalibAdapter:
         }
         if max_epochs is not None:
             engine_kwargs["max_epochs"] = max_epochs
+        if precision is not None:
+            engine_kwargs["precision"] = precision
         if self.device == "cpu":
             engine_kwargs["accelerator"] = "cpu"
         engine = Engine(**engine_kwargs)

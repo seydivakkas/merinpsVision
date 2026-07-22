@@ -87,6 +87,14 @@ class DriftPolicyConfig(BaseModel):
     sudden_drop_review_pp: float = Field(default=2.0, gt=0.0)
     sudden_drop_incident_pp: float = Field(default=5.0, gt=0.0)
     sudden_drop_block_pp: float = Field(default=10.0, gt=0.0)
+    # Gradual drift thresholds
+    gradual_window_weeks: int = Field(default=4, ge=1)
+    gradual_weekly_drop_pp: float = Field(default=0.5, gt=0.0)
+    gradual_min_consecutive_weeks: int = Field(default=3, ge=1)
+    # Retraining governance
+    retraining_min_target_images: int = Field(default=200, ge=1)
+    retraining_min_labeled_validation_images: int = Field(default=100, ge=1)
+    retraining_cooldown_days: int = Field(default=7, ge=0)
     # Canary evaluation thresholds (M7)
     canary_max_disagreement_rate: float = Field(default=0.05, ge=0.0, le=1.0)
     canary_min_recall_delta: float = Field(default=-0.02)

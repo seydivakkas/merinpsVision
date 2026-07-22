@@ -5,7 +5,8 @@ alwaysApply: true
 
 # WeaveVision Agent Rules
 
-- Read `WEAVEVISION_CURSOR_MASTER_BUILD_SPEC.md` before changing architecture.
+- **Read `SKILLS.md` first** for a complete project summary (architecture, modules, APIs, rules, data flows). This saves tokens and context.
+- Read `WEAVEVISION_CURSOR_MASTER_BUILD_SPEC.md` only for phase-level execution details or acceptance gate specifics.
 - Implement phases in the specified order.
 - Do not invent datasets, metrics, thresholds, model results, or business claims.
 - Do not use test data for training, model selection, or threshold calibration.

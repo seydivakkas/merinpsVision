@@ -3,11 +3,14 @@
 from pathlib import Path
 
 import numpy as np
+import pytest
 from PIL import Image
 
 from weavevision.domain.enums import Decision
 from weavevision.services.analysis_service import AnalysisService
 from weavevision.settings import load_settings
+
+pytestmark = pytest.mark.smoke
 
 
 def test_tiny_invalid_quality_input_abstains_without_model(tmp_path: Path) -> None:

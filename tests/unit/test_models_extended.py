@@ -75,6 +75,71 @@ def test_adapter_requires_artifact_and_can_use_loaded_inferencer(tmp_path: Path)
     assert copied.read_text() == "placeholder"
 
 
+def test_fit_mvtec_forwards_precision_to_anomalib_engine(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    captured: dict[str, object] = {}
+
+    class FakeDataModule:
+        def __init__(self, **kwargs: object) -> None:
+            captured["datamodule_kwargs"] = kwargs
+
+        def val_dataloader(self) -> str:
+            return "validation-loader"
+
+    class FakeTrainer:
+        def save_checkpoint(self, destination: Path) -> None:
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_text("checkpoint", encoding="utf-8")
+
+    class FakeEngine:
+        def __init__(self, **kwargs: object) -> None:
+            captured["engine_kwargs"] = kwargs
+            self.trainer = FakeTrainer()
+
+        def fit(self, **kwargs: object) -> None:
+            captured["fit_kwargs"] = kwargs
+
+        def export(self, **kwargs: object) -> Path:
+            export_root = Path(str(kwargs["export_root"]))
+            export_root.mkdir(parents=True, exist_ok=True)
+            exported = export_root / "model.xml"
+            exported.write_text("openvino", encoding="utf-8")
+            return exported
+
+        def predict(self, **kwargs: object) -> list[object]:
+            captured["predict_kwargs"] = kwargs
+            return []
+
+    import anomalib.data
+    import anomalib.engine
+
+    monkeypatch.setattr(anomalib.data, "MVTecAD", FakeDataModule)
+    monkeypatch.setattr(anomalib.engine, "Engine", FakeEngine)
+    monkeypatch.setattr(
+        "weavevision.models.anomalib_adapter.create_anomalib_model", lambda *_: object()
+    )
+    adapter = AnomalibAdapter("model", "patchcore", {"name": "patchcore"}, device="cpu")
+
+    artifact, predictions = adapter.fit_mvtec(
+        tmp_path,
+        "carpet",
+        tmp_path / "checkpoints" / "model.ckpt",
+        precision="32-true",
+    )
+
+    assert artifact.name == "model.xml"
+    assert predictions == []
+    assert captured["engine_kwargs"] == {
+        "default_root_dir": tmp_path / "checkpoints",
+        "logger": False,
+        "enable_progress_bar": False,
+        "deterministic": True,
+        "precision": "32-true",
+        "accelerator": "cpu",
+    }
+
+
 def test_model_factory_allowlist_and_arguments() -> None:
     patchcore = create_anomalib_model(
         "patchcore",

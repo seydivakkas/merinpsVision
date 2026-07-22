@@ -24,11 +24,13 @@ def perturb(image: np.ndarray, kind: str, value: float, seed: int = 42) -> np.nd
     if kind == "rotation":
         height, width = image.shape[:2]
         matrix = cv2.getRotationMatrix2D((width / 2, height / 2), value, 1.0)
-        return cv2.warpAffine(image, matrix, (width, height), borderMode=cv2.BORDER_REFLECT)
+        return np.asarray(
+            cv2.warpAffine(image, matrix, (width, height), borderMode=cv2.BORDER_REFLECT)
+        )
     if kind == "downsample":
         height, width = image.shape[:2]
         small = cv2.resize(image, None, fx=value, fy=value, interpolation=cv2.INTER_AREA)
-        return cv2.resize(small, (width, height), interpolation=cv2.INTER_LINEAR)
+        return np.asarray(cv2.resize(small, (width, height), interpolation=cv2.INTER_LINEAR))
     if kind == "jpeg":
         success, encoded = cv2.imencode(
             ".jpg", cv2.cvtColor(image, cv2.COLOR_RGB2BGR), [cv2.IMWRITE_JPEG_QUALITY, int(value)]
@@ -38,7 +40,7 @@ def perturb(image: np.ndarray, kind: str, value: float, seed: int = 42) -> np.nd
         decoded = cv2.imdecode(encoded, cv2.IMREAD_COLOR)
         if decoded is None:
             raise ValueError("JPEG perturbation decoding failed")
-        return cv2.cvtColor(decoded, cv2.COLOR_BGR2RGB)
+        return np.asarray(cv2.cvtColor(decoded, cv2.COLOR_BGR2RGB))
     if kind == "occlusion":
         fraction = float(value)
         if not 0.0 < fraction < 1.0:

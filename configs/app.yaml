@@ -47,6 +47,14 @@ drift:
   sudden_drop_review_pp: 2.0
   sudden_drop_incident_pp: 5.0
   sudden_drop_block_pp: 10.0
+  # Gradual drift detection parameters
+  gradual_window_weeks: 4
+  gradual_weekly_drop_pp: 0.5
+  gradual_min_consecutive_weeks: 3
+  # Retraining governance (calibrate against operational-validation data only)
+  retraining_min_target_images: 200
+  retraining_min_labeled_validation_images: 100
+  retraining_cooldown_days: 7
   # Canary evaluation thresholds (M7)
   # challenger is rejected when disagreement_rate > max OR recall_delta < min
   canary_max_disagreement_rate: 0.05

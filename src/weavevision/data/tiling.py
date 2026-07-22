@@ -55,8 +55,8 @@ def merge_tile_maps(
     """Merge tile anomaly maps with a positive center-weighted overlap window."""
     if len(tile_maps) != len(coordinates) or not tile_maps:
         raise ValueError("tile maps and coordinates must be non-empty and aligned")
-    accumulator = np.zeros(output_shape, dtype=np.float64)
-    weights = np.zeros(output_shape, dtype=np.float64)
+    accumulator: np.ndarray = np.zeros(output_shape, dtype=np.float64)
+    weights: np.ndarray = np.zeros(output_shape, dtype=np.float64)
     for tile_map, coordinate in zip(tile_maps, coordinates, strict=True):
         expected = (coordinate.y1 - coordinate.y0, coordinate.x1 - coordinate.x0)
         if tile_map.shape != expected:

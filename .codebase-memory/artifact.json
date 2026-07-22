@@ -1,11 +1,11 @@
 {
     "schema_version": 2,
-    "commit": "HEAD",
-    "indexed_at": "2026-07-18T00:28:14Z",
+    "commit": "c159b735b5c512f908653f9df667589da7d5679a",
+    "indexed_at": "2026-07-20T04:39:28Z",
     "project": "weavevision",
-    "nodes": 897,
-    "edges": 3484,
-    "original_size": 2949120,
-    "compressed_size": 570065,
-    "compression_level": 9
+    "nodes": 1485,
+    "edges": 6697,
+    "original_size": 6029312,
+    "compressed_size": 1148017,
+    "compression_level": 3
 }

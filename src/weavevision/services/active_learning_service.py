@@ -213,7 +213,7 @@ def _greedy_coreset(features: np.ndarray, k: int) -> np.ndarray:
     normed = features.astype(np.float32) / norms.astype(np.float32)
 
     selected = [int(np.argmax(normed[:, 0]))]  # deterministic seed
-    min_dist = np.full(n, np.inf, dtype=np.float32)
+    min_dist: np.ndarray = np.full(n, np.inf, dtype=np.float32)
 
     for _ in range(k - 1):
         last = normed[selected[-1]]
